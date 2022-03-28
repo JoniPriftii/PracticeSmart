@@ -1,0 +1,33 @@
+﻿@model Practice.ViewModel.UserViewModel;
+@{
+    ViewData["Title"] = "MyProfile";
+}
+
+<h1>@Model.User.FirstName Profile</h1>
+
+<div class="row px-1">
+    <div class="column-3">
+        <img class="py-5" alt="image"/>
+    </div>
+    <div class="column-7">
+        <div class="row">
+            <p class="fw-bold">User Data</p>
+            <p><span>First Name : </span>@Model.User.FirstName</p>
+            <p><span>Last Name : </span>@Model.User.LastName</p>
+            <p><span>Commision : </span>@Model.User.Commission</p>
+            <p><span>Manager Id : </span>@Model.User.ManagerId</p>
+        </div>
+        <div class="row">
+            <p class="fw-bold">Departament Data</p>
+            <p><span>Departament : </span>@Model.Departament.Name</p>
+        </div>
+        <div class="row">
+            <p class="fw-bold">Job Data</p>
+            <p><span>Job Title :</span> @Model.Job.JobTitle</p>
+            <p><span>Min Salary :</span> @Model.Job.MinSalary</p>
+            <p><span>Current Salary :</span> @Model.User.Salary</p>
+            <p><span>Max Salary :</span> @Model.Job.MaxSalary</p>
+        </div>
+    </div>
+</div>
+

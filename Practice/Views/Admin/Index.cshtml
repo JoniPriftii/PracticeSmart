@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+@if (Model.Any())
+{
+    foreach(var role in Model)
+    {
+        <div class="card">
+            <div class="card-header">
+                Role name :
+            </div>
+            <div class="card-body">
+                 <h1>@role.Name</h1>
+            </div>
+            <div class="card-footer">
+                <a  class="btn btn-primary" asp-controller = "Admin" asp-action="EditRole" asp-route-id="@role.Id">Edit</a>
+            </div>
+           
+        </div>
+    }
+}
+else
+{
+    <h1>There are no roles</h1>
+}

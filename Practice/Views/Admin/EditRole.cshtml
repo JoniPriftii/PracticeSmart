@@ -1,0 +1,53 @@
+﻿@model Practice.ViewModel.EditRoleViewModel
+@{
+}
+
+<form method="post">
+    <div class="row form-group">
+        <label asp-for="Id" class="col-sm-2 col-form-label"></label>
+        <div>
+            <input asp-for="Id" disabled class="form-control" />
+        </div>
+
+    </div>
+
+    <div class="row form-group">
+        <label asp-for="RoleName" class="col-sm-2 col-form-label"></label>
+        <div>
+            <input asp-for="RoleName" class="form-control" />
+        </div>
+
+    </div>
+
+    <div class="row form-group">
+        <div>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+
+    </div>
+
+
+    <div class="card">
+        <div class="card-header">
+            <p>User inthis role</p>
+        </div>
+        <div class="card-body">
+            @if (Model.Users.Any())
+            {
+                @foreach (var user in Model.Users)
+                {
+                    <p class="card-title">@user</p>
+                }
+            }
+            else
+            {
+                <p class="card-title">There are no users in this role</p>
+            }
+
+        </div>
+        <div class="card-footer">
+
+            </divc>
+        </div>
+</form>
