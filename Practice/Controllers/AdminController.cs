@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Practice.Data.Migrations;
+using Practice.Data;
 using Practice.Models;
 using Practice.ViewModel;
 
@@ -9,6 +9,7 @@ namespace Practice.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<Emplyees> _userManager;
         public AdminController(RoleManager<IdentityRole> roleManager, UserManager<Emplyees> userManager)
@@ -45,10 +46,7 @@ namespace Practice.Controllers
                     return RedirectToAction("Index", "Admin");
                 };
 
-                foreach (IdentityError error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                };
+
             };
 
             return View(model);
@@ -90,7 +88,7 @@ namespace Practice.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            
+
             foreach (var user in _userManager.Users)
             {
                 if (await _userManager.IsInRoleAsync(user, role.Name))
@@ -100,5 +98,79 @@ namespace Practice.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUserInRole(string roleId)
+        {
+            ViewBag.roleId = roleId;
+
+            var role = await _roleManager.FindByIdAsync(roleId);
+
+            var model = new List<UserRoleViewModel>();
+
+            foreach (var user in _userManager.Users)
+            {
+                var userRoleViewModel = new UserRoleViewModel
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+
+                };
+
+                if (await _userManager.IsInRoleAsync(user, role.Name))
+                {
+                    userRoleViewModel.isChecked = true;
+                }
+                else
+                {
+                    userRoleViewModel.isChecked = false;
+                }
+
+                model.Add(userRoleViewModel);
+            }
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditUserInRole(List<UserRoleViewModel> model, string roleId)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId);
+
+            for(int i=0; i< model.Count; i++)
+            {
+                var user = await _userManager.FindByIdAsync(model[i].UserId);
+
+                IdentityResult result = null;
+                if (model[i].isChecked && !(await _userManager.IsInRoleAsync(user, role.Name)))
+                {
+                    result = await _userManager.AddToRoleAsync(user, role.Name);
+                }
+                else if (!model[i].isChecked && await _userManager.IsInRoleAsync(user, role.Name))
+                {
+                    result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+                }
+                else
+                {
+                    continue;
+                }
+
+                if (result.Succeeded)
+                {
+                    if(i<(model.Count - 1))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return RedirectToAction("EditRole", new { Id = roleId });
+                    }
+                }
+            }
+
+            return RedirectToAction("EditRole", new { Id = roleId });
+        }
+
     }
 }
