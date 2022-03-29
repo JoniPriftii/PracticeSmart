@@ -1,9 +1,11 @@
-﻿using Practice.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Practice.Models;
 namespace Practice.ViewModel
 {
     public class UserAndRoleViewModel
     {
         public Emplyees? Employees { get; set; } 
-        public string? RoleName { get; set; }    
+        public IdentityRole Role { get; set; }    
+       
     }
 }
