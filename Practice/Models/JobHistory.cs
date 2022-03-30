@@ -12,10 +12,10 @@ namespace Practice.Models
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
         public int? JobsId { get; set; }
-        public virtual Jobs Jobs { get; set; }
+        public virtual Jobs? Jobs { get; set; }
         public string EmplyeesId { get; set; }
-        public virtual Emplyees Employees { get; set; }
+        public virtual Emplyees? Employees { get; set; }
         public int? DepartmentsId { get; set; }
-        public virtual Departments Departments { get; set; }
+        public virtual Departments? Departments { get; set; }
     }
 }

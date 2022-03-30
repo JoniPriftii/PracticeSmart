@@ -52,8 +52,10 @@ namespace Practice.Controllers
 
         public async Task<IActionResult> sendData(string userid , string roleid)
         {
-
+            
             var user = await _usersManager.FindByIdAsync(userid);
+
+            
             var role = await _roleManager.FindByIdAsync(roleid);
 
             var roles = _usersManager.GetRolesAsync(user).Result.ToArray();
@@ -66,16 +68,71 @@ namespace Practice.Controllers
                 }
 
             }
-            else
-            {
-
-            }
+           
 
             var result = await _usersManager.AddToRoleAsync(user, role.Name);
 
             return Ok(role.Name);
         }
 
+        public async Task<IActionResult> ChangeName(string userid, string value)
+        {
+            var user = await _usersManager.FindByIdAsync(userid);
+
+            user.FirstName = value;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+        public async Task<IActionResult> ChangeSurname(string userid, string value)
+        {
+            var user = await _usersManager.FindByIdAsync(userid);
+
+            user.LastName = value;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+        public async Task<IActionResult> ChangeEmail(string userid, string value)
+        {
+            var user = await _usersManager.FindByIdAsync(userid);
+
+            await _usersManager.SetUserNameAsync(user, value);
+            return Ok();
+        }
+        public async Task<IActionResult> ChangeCommision(string userid, int value)
+        {
+            var user = await _usersManager.FindByIdAsync(userid);
+
+            user.Commission = value;
+            _context.SaveChanges();
+
+            return Ok();
+        }       
+        public async Task<IActionResult> ChangeDepartament(string userid , int value)
+        {
+            var user = await _usersManager.FindByIdAsync(userid);
+
+            user.DepartmentsId = value;
+            _context.SaveChanges();
+            
+            return Ok();
+        }
+        public async Task<IActionResult> ChangeSalary(string userid, int value)
+        {
+            var user = await _usersManager.FindByIdAsync(userid);
+
+            user.Salary = value;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+
+        /// <summary>
+        /// Duhet Fshire si metod
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> MyProfile()
         {
             var user = await _usersManager.GetUserAsync(User);
@@ -87,19 +144,48 @@ namespace Practice.Controllers
                 Departament = _context.Departments.Where(s => s.Id == user.DepartmentsId).FirstOrDefault(),
                 Job = _context.Jobs.Where(s => s.Id == user.JobsId).FirstOrDefault()
             };
+
             return View(userViewModel);
         }
 
+
+        //Admin UserDetils Page ku behen ndryshimet asinkronet tek te dhenat e userave
         public async Task<IActionResult> Details(string id)
         {
+            var user = await _usersManager.GetUserAsync(User); ;
             if (id == null)
             {
-                return NotFound();
+                user = await _usersManager.GetUserAsync(User);
+            }
+            else
+            {
+                user = await _context.Emplyees.FirstOrDefaultAsync(e => e.Id == id);
+
+                var jobHistories = _context.JobHistories.Where(s => s.EmplyeesId == id).ToList();
+           
+       
+                var jobHistoryTitles = new List<JobTitleJHViewModel>();
+
+                foreach(var jobHis in jobHistories)
+                {
+                    var job =  _context.Jobs.Where(i => i.Id == jobHis.JobsId).FirstOrDefault();
+                    string jobTitle = job.JobTitle;
+
+                    var temporaryJobTitleJh = new JobTitleJHViewModel
+                    {
+                        jobHistory = jobHis,
+                        jobTitle = jobTitle
+
+                    };
+                    jobHistoryTitles.Add(temporaryJobTitleJh);
+                }
+                ViewBag.JobAndHistory = jobHistoryTitles;
+            
             }
 
-            var user = await _context.Emplyees.FirstOrDefaultAsync(e => e.Id == id);
-
-
+            
+            ViewBag.Departments = _context.Departments.ToList();
+            
             UserViewModel userViewModel = new UserViewModel
             {
                 User = user,

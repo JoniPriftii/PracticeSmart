@@ -1,33 +1,127 @@
-﻿@model Practice.ViewModel.UserViewModel;
+﻿@using Microsoft.AspNetCore.Identity
+@using Practice.ViewModel
+@model Practice.ViewModel.UserViewModel;
 @{
     ViewData["Title"] = "MyProfile";
 }
 
-<h1>@Model.User.FirstName Profile</h1>
 
-<div class="row px-1">
-    <div class="column-3">
-        <img class="py-5" alt="image"/>
-    </div>
-    <div class="column-7">
-        <div class="row">
-            <p class="fw-bold">User Data</p>
-            <p><span>First Name : </span>@Model.User.FirstName</p>
-            <p><span>Last Name : </span>@Model.User.LastName</p>
-            <p><span>Commision : </span>@Model.User.Commission</p>
-            <p><span>Manager Id : </span>@Model.User.ManagerId</p>
+
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                <span class="font-weight-bold">@Model.User.FirstName @Model.User.LastName</span>
+                <span class="text-black-50">@Model.User.UserName</span><span> </span></div>
         </div>
-        <div class="row">
-            <p class="fw-bold">Departament Data</p>
-            <p><span>Departament : </span>@Model.Departament.Name</p>
+        @*@if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+        {*@
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">User Data</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <label class="labels">Name</label>
+                        <input type="text" class="form-control" value="@Model.User.FirstName" onchange="ChangeValue('@Url.Action("ChangeName" , "UsersManager")' , this )">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labels">Surname</label>
+                        <input type="text" class="form-control" value="@Model.User.LastName" onchange="ChangeValue('@Url.Action("ChangeSurname" , "UsersManager")' , this )">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label class="labels">Email</label>
+                        <input type="text" class="form-control" value="@Model.User.UserName" onchange="ChangeValue('@Url.Action("ChangeEmail" , "UsersManager")' , this )">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">Commision</label>
+                        <input type="text" class="form-control" value="@Model.User.Commission" onchange="ChangeValue('@Url.Action("ChangeCommision" , "UsersManager")' , this )">
+                    </div>
+                    
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <p class="fw-bold">Job Data</p>
-            <p><span>Job Title :</span> @Model.Job.JobTitle</p>
-            <p><span>Min Salary :</span> @Model.Job.MinSalary</p>
-            <p><span>Current Salary :</span> @Model.User.Salary</p>
-            <p><span>Max Salary :</span> @Model.Job.MaxSalary</p>
+        
+
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Proffesional Data</h4>
+                </div>
+                <div class="p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-right">Department Data</h5>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">Department Name </label>
+                        <select class="form-control" onchange="ChangeValue('@Url.Action("ChangeDepartament" , "UsersManager")' , this )">
+                            @foreach(Departments dep in ViewBag.Departments)
+                            {
+                                if(Model.User.DepartmentsId == dep.Id)
+                                {
+                                    <option value="@dep.Id" selected >@dep.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@dep.Id" >@dep.Name</option>
+                                }
+                            }
+                        </select>
+                        
+                    </div> <br>
+                        
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-right">Current Job Data</h5>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">Current job title</label>
+                        <input type="text" class="form-control" value="@Model.Job.JobTitle">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="labels">Current job salary</label>
+                        <input type="text" class="form-control" value="@Model.User?.Salary" onchange="ChangeValue('@Url.Action("ChangeSalary" , "UsersManager")' , this )">
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="text-right">Job History Data</h5>
+                    </div>
+                    @foreach(JobTitleJHViewModel jobHis in ViewBag.JobAndHistory)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <h6 class="text-right">@jobHis.jobTitle</h6>
+                        </div>
+                        <div class="col-md-12">
+                            <span>@jobHis.jobHistory.StartDate.ToString("dd MMMM yyyy") to</span> 
+                            <span>@jobHis.jobHistory.EndDate.Date.ToString("dd MMMM yyyy")</span>
+                        </div>
+                    } 
+                </div>
+            </div>
         </div>
+        @*}*@
+        
     </div>
 </div>
 
+
+<script>
+ function ChangeValue(url ,result)
+ {
+     var vlera = $(result).val();
+         $.ajax({
+            type: "POST",
+            url: url,
+            data:{userid:'@Model.User.Id', value:vlera},
+            success: function(response){
+               $(result).addClass('is-valid');
+            },
+            error: function(response){
+               $(result).addClass('is-not-valid');
+            }
+          });
+ }
+</script>

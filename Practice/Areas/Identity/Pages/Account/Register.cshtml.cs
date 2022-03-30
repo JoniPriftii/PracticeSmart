@@ -105,7 +105,7 @@ namespace Practice.Areas.Identity.Pages.Account
                 user.JobsId = Input.JobsId;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
+                var resultRole = await _userManager.AddToRoleAsync(user, "User");
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
