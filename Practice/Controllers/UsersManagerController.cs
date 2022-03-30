@@ -97,8 +97,12 @@ namespace Practice.Controllers
         {
             var user = await _usersManager.FindByIdAsync(userid);
 
-            await _usersManager.SetUserNameAsync(user, value);
-            return Ok();
+            var result =  await _usersManager.SetUserNameAsync(user, value);
+            if (result.Succeeded)
+                return Ok();
+            else
+                return NotFound();
+            
         }
         public async Task<IActionResult> ChangeCommision(string userid, int value)
         {

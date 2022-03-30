@@ -103,7 +103,18 @@ namespace Practice.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            if (this.User.IsInRole("User"))
+            {
+                returnUrl ??= Url.Content("~/UsersManager/Index");
+            }
+            else
+            {
+                if (this.User.IsInRole("User"))
+                {
+                    returnUrl ??= Url.Content("~/");
+                }
+            }
+            
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
