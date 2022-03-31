@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<Emplyees> signInManager
+@inject UserManager<Emplyees> _userManager
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +15,22 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Practice</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="navbar-brand" asp-area="" asp-controller="UsersManager" asp-action="Index">Practice</a>
+                }
+                else
+                {
+                    if (User.IsInRole("User"))
+                    {
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Practice</a>
+                    }
+                    else
+                    {
+                        <a class="navbar-brand" asp-area="Identity" asp-page="/Account/Login">Practice</a>
+                    }
+                }
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -28,14 +43,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (signInManager.IsSignedIn(User))
+                        @if (User.IsInRole("User"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UsersManager" asp-action="MyProfile">Profile</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UsersManager" asp-action="Details" >Profile</a>
                             </li>
                         }
-                        
-                        @if (signInManager.IsSignedIn(User) @*&& User.IsInRole("Admin")*@)
+
+
+
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
@@ -59,7 +76,7 @@
                                    asp-action="Index">Users</a>
                                 </div>
                             </li>
-                            
+
                         }
                     </ul>
                     <partial name="_LoginPartial" />
@@ -80,8 +97,8 @@
     </footer>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

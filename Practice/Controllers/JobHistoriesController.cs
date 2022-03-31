@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,12 @@ namespace Practice.Controllers
     public class JobHistoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Emplyees> _userManager;
 
-        public JobHistoriesController(ApplicationDbContext context)
+        public JobHistoriesController(ApplicationDbContext context, UserManager<Emplyees> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: JobHistories
@@ -49,8 +52,13 @@ namespace Practice.Controllers
         }
 
         // GET: JobHistories/Create
-        public IActionResult Create()
+        public IActionResult Create(string? id)
         {
+            ViewBag.CurrentId = null;
+            if(id != null)
+            {
+                ViewBag.CurrentId = id;
+            }
             ViewData["DepartmentsId"] = new SelectList(_context.Departments, "Id", "Id");
             ViewData["EmplyeesId"] = new SelectList(_context.Emplyees, "Id", "Id");
             ViewData["JobsId"] = new SelectList(_context.Jobs, "Id", "Id");
@@ -62,14 +70,27 @@ namespace Practice.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StartDate,EndDate,JobsId,EmplyeesId,DepartmentsId")] JobHistory jobHistory)
+        public async Task<IActionResult> Create(JobHistory jobHistory)
         {
-            if (ModelState.IsValid)
+            var user = new Emplyees();
+             
+            if(jobHistory.EmplyeesId == null)
             {
+                user = await _userManager.FindByNameAsync(User.Identity.Name);
+                jobHistory.EmplyeesId = user.Id;
+            }
+            else
+            {
+                 user = await _userManager.FindByIdAsync(jobHistory.EmplyeesId);
+
+            }
+
+            jobHistory.DepartmentsId = user.DepartmentsId;
+                jobHistory.JobsId = user.JobsId;
                 _context.Add(jobHistory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
+
             ViewData["DepartmentsId"] = new SelectList(_context.Departments, "Id", "Id", jobHistory.DepartmentsId);
             ViewData["EmplyeesId"] = new SelectList(_context.Emplyees, "Id", "Id", jobHistory.EmplyeesId);
             ViewData["JobsId"] = new SelectList(_context.Jobs, "Id", "Id", jobHistory.JobsId);

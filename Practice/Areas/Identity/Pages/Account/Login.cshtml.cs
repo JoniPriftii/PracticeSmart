@@ -21,11 +21,14 @@ namespace Practice.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<Practice.Models.Emplyees> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private UserManager<Practice.Models.Emplyees> _usersManager;
 
-        public LoginModel(SignInManager<Practice.Models.Emplyees> signInManager, ILogger<LoginModel> logger)
+
+        public LoginModel(SignInManager<Practice.Models.Emplyees> signInManager, UserManager<Practice.Models.Emplyees> usersManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _usersManager = usersManager;
         }
 
         /// <summary>
@@ -103,23 +106,24 @@ namespace Practice.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            if (this.User.IsInRole("User"))
-            {
-                returnUrl ??= Url.Content("~/UsersManager/Index");
-            }
-            else
-            {
-                if (this.User.IsInRole("User"))
-                {
-                    returnUrl ??= Url.Content("~/");
-                }
-            }
-            
+           
+           
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
+                var user = _usersManager.FindByNameAsync(Input.Email).Result;
+                
+
+                if (await _usersManager.IsInRoleAsync(user, "Admin"))
+                {
+                    returnUrl ??= Url.Content("~/UsersManager/Index");
+                }
+                else
+                {
+                    returnUrl ??= Url.Content("~/");
+                }
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);

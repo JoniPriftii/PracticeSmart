@@ -133,61 +133,40 @@ namespace Practice.Controllers
         }
 
 
-        /// <summary>
-        /// Duhet Fshire si metod
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IActionResult> MyProfile()
-        {
-            var user = await _usersManager.GetUserAsync(User);
-
-
-            UserViewModel userViewModel = new UserViewModel
-            {
-                User = user,
-                Departament = _context.Departments.Where(s => s.Id == user.DepartmentsId).FirstOrDefault(),
-                Job = _context.Jobs.Where(s => s.Id == user.JobsId).FirstOrDefault()
-            };
-
-            return View(userViewModel);
-        }
+        
 
 
         //Admin UserDetils Page ku behen ndryshimet asinkronet tek te dhenat e userave
         public async Task<IActionResult> Details(string id)
         {
-            var user = await _usersManager.GetUserAsync(User); ;
-            if (id == null)
-            {
-                user = await _usersManager.GetUserAsync(User);
-            }
-            else
+
+            var user = await _usersManager.GetUserAsync(User);
+            var jobHistories = _context.JobHistories.Where(s => s.EmplyeesId == user.Id).ToList();
+            
+            if(id != null)
             {
                 user = await _context.Emplyees.FirstOrDefaultAsync(e => e.Id == id);
 
-                var jobHistories = _context.JobHistories.Where(s => s.EmplyeesId == id).ToList();
-           
-       
-                var jobHistoryTitles = new List<JobTitleJHViewModel>();
-
-                foreach(var jobHis in jobHistories)
-                {
-                    var job =  _context.Jobs.Where(i => i.Id == jobHis.JobsId).FirstOrDefault();
-                    string jobTitle = job.JobTitle;
-
-                    var temporaryJobTitleJh = new JobTitleJHViewModel
-                    {
-                        jobHistory = jobHis,
-                        jobTitle = jobTitle
-
-                    };
-                    jobHistoryTitles.Add(temporaryJobTitleJh);
-                }
-                ViewBag.JobAndHistory = jobHistoryTitles;
-            
+                jobHistories = _context.JobHistories.Where(s => s.EmplyeesId == id).ToList();                       
             }
 
-            
+            var jobHistoryTitles = new List<JobTitleJHViewModel>();
+
+            foreach (var jobHis in jobHistories)
+            {
+                var job = _context.Jobs.Where(i => i.Id == jobHis.JobsId).FirstOrDefault();
+                string jobTitle = job.JobTitle;
+
+                var temporaryJobTitleJh = new JobTitleJHViewModel
+                {
+                    jobHistory = jobHis,
+                    jobTitle = jobTitle
+
+                };
+                jobHistoryTitles.Add(temporaryJobTitleJh);
+            }
+            ViewBag.JobAndHistory = jobHistoryTitles;
+
             ViewBag.Departments = _context.Departments.ToList();
             
             UserViewModel userViewModel = new UserViewModel
