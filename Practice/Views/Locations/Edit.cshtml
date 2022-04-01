@@ -2,53 +2,73 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = null;
 }
 
-<h1>Edit</h1>
-
-<h4>Locations</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="LocationAddress" class="control-label"></label>
-                <input asp-for="LocationAddress" class="form-control" />
-                <span asp-validation-for="LocationAddress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StateProvince" class="control-label"></label>
-                <input asp-for="StateProvince" class="form-control" />
-                <span asp-validation-for="StateProvince" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CountriesId" class="control-label"></label>
-                <select asp-for="CountriesId" class="form-control" asp-items="ViewBag.CountriesId"></select>
-                <span asp-validation-for="CountriesId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="modal-header">
+    <h5 class="modal-title">Modal title</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-4">
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="LocationAddress" class="control-label"></label>
+                    <input asp-for="LocationAddress" class="form-control" />
+                    <span asp-validation-for="LocationAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PostalCode" class="control-label"></label>
+                    <input asp-for="PostalCode" class="form-control" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="City" class="control-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StateProvince" class="control-label"></label>
+                    <input asp-for="StateProvince" class="form-control" />
+                    <span asp-validation-for="StateProvince" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CountriesId" class="control-label"></label>
+                    <select asp-for="CountriesId" class="form-control" asp-items="ViewBag.CountriesId"></select>
+                    <span asp-validation-for="CountriesId" class="text-danger"></span>
+                </div>
+                
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="button"
+            onclick="Create('@Url.Action("EditLocations","Locations")')" class="btn btn-primary">
+        Edit
+    </button>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    function Create(url )
+    {
+        var location = $("#LocationAddress").val();
+        var post = $("#PostalCode").val();
+        var city = $("#City").val();
+        var state = $("#StateProvince").val();
+        var country = $("#CountriesId").val();
+        $.ajax({
+            type:"POST",
+            url: url,
+             data:{LocationAddress:location, PostalCode:post,City:city , StateProvince:state , CountriesId:country },
+             success:function(response)
+             {
+                 location.reload();
+             }
+        })
+
+
+    }
+</script>

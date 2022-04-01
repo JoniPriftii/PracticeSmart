@@ -66,7 +66,9 @@
                                    asp-action="Index">Jobs</a>
                                     <a class="dropdown-item" asp-controller="JobHistories"
                                    asp-action="Index">JobHistories</a>
-                                    <a class="dropdown-item" asp-controller="Countries"
+                                   <a class="dropdown-item" asp-controller="Locations"
+                                   asp-action="Index">Locations</a> 
+                                   <a class="dropdown-item" asp-controller="Countries"
                                    asp-action="Index">Countries</a>
                                     <a class="dropdown-item" asp-controller="Regions"
                                    asp-action="Index">Regions</a>
@@ -88,6 +90,13 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </div>
+    <div class="modal fade" id="myGlobalModalStacked1" tabindex="-1" role="dialog" aria-labelledby="myGlobalModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+
+            </div>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">

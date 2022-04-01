@@ -5,7 +5,9 @@
 }
 
 
-
+<p>
+     <a  class="btn btn-success" onclick="DisplayModalStacked('@Url.Action("CreateRole","Admin")',1)">Add Role</a>
+</p>
 @if (Model.Any())
 {
     foreach(var role in Model)

@@ -50,20 +50,14 @@ namespace Practice.Controllers
             return View();
         }
 
-        // POST: Regions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Regions regions)
+
+        public async Task<IActionResult> CreateRegions(Regions regions)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(regions);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(regions);
+
+            _context.Add(regions);
+            await _context.SaveChangesAsync();
+            return Ok();
+
         }
 
         // GET: Regions/Edit/5
@@ -82,39 +76,34 @@ namespace Practice.Controllers
             return View(regions);
         }
 
-        // POST: Regions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Regions regions)
+
+        public async Task<IActionResult> EditRegions(int id, Regions regions)
         {
             if (id != regions.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(regions);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RegionsExists(regions.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(regions);
+                await _context.SaveChangesAsync();
             }
-            return View(regions);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RegionsExists(regions.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok();
+
+
         }
 
         // GET: Regions/Delete/5

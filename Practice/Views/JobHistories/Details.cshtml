@@ -2,47 +2,49 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = null;
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>JobHistory</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Jobs)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Jobs.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Employees)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Employees.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Departments)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Departments.Id)
-        </dd>
-    </dl>
+<div class="modal-header">
+    <h5 class="modal-title">Modal title</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="modal-body">
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StartDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.EndDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EndDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Jobs)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Jobs.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Employees)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Employees.Id)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Departments)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Departments.Id)
+            </dd>
+        </dl>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 </div>

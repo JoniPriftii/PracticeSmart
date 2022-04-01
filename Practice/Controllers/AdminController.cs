@@ -29,11 +29,10 @@ namespace Practice.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateRole(CreateRoleViewModel model)
+       
+        public async Task<IActionResult> CreateNewRole(CreateRoleViewModel model)
         {
-            if (ModelState.IsValid)
-            {
+            
                 IdentityRole identityRole = new IdentityRole
                 {
                     Name = model.RoleName
@@ -43,11 +42,8 @@ namespace Practice.Controllers
 
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Admin");
+                return Ok();
                 };
-
-
-            };
 
             return View(model);
         }

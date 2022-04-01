@@ -2,16 +2,16 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = null;
 }
 
-<h1>Edit</h1>
-
-<h4>JobHistory</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="modal-header">
+    <h5 class="modal-title">Modal title</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-4">
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
@@ -38,17 +38,35 @@
                 <select asp-for="DepartmentsId" class="form-control" asp-items="ViewBag.DepartmentsId"></select>
                 <span asp-validation-for="DepartmentsId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="button"
+            onclick="Create('@Url.Action("EditJobHistories","JobHistories")')" class="btn btn-primary">
+        Edit
+    </button>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    function Create(url )
+    {
+        var start = $("#StartDate").val();
+        var end = $("#EndDate").val();
+        var employee = $("#EmplyeesId").val();
+        $.ajax({
+            type:"POST",
+            url: url,
+             data:{StartDate:start, EndDate:end,EmplyeesId:employee},
+             success:function(response)
+             {
+                 location.reload();
+             }
+        })
+
+
+    }
+</script>

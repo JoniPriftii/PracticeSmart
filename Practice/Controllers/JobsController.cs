@@ -50,20 +50,14 @@ namespace Practice.Controllers
             return View();
         }
 
-        // POST: Jobs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,JobTitle,MinSalary,MaxSalary")] Jobs jobs)
+
+        public async Task<IActionResult> CreateJobs(Jobs jobs)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(jobs);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(jobs);
+
+            _context.Add(jobs);
+            await _context.SaveChangesAsync();
+            return Ok();
+
         }
 
         // GET: Jobs/Edit/5
@@ -82,39 +76,34 @@ namespace Practice.Controllers
             return View(jobs);
         }
 
-        // POST: Jobs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,JobTitle,MinSalary,MaxSalary")] Jobs jobs)
+
+        public async Task<IActionResult> EditJobs(int id, Jobs jobs)
         {
             if (id != jobs.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(jobs);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!JobsExists(jobs.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(jobs);
+                await _context.SaveChangesAsync();
             }
-            return View(jobs);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!JobsExists(jobs.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok();
+
+
         }
 
         // GET: Jobs/Delete/5

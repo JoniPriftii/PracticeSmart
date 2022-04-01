@@ -2,36 +2,54 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = null;
 }
 
-<h1>Create</h1>
-
-<h4>Countries</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegionsId" class="control-label"></label>
-                <select asp-for="RegionsId" class ="form-control" asp-items="ViewBag.RegionsId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="modal-header">
+    <h5 class="modal-title">Modal title</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-4">            
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RegionsId" class="control-label"></label>
+                    <select asp-for="RegionsId" class="form-control" asp-items="ViewBag.RegionsId"></select>
+                </div>          
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="button"
+            onclick="Create('@Url.Action("CreateCountries","Countries")')" class="btn btn-primary">
+        Create
+    </button>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    function Create(url )
+    {
+        var name = $("#Name").val();
+        var region = $("#RegionsId").val();
+        $.ajax({
+            type:"POST",
+            url: url,
+             data:{Name:name, RegionsId:region},
+             success:function(response)
+             {
+                 location.reload();
+             }
+        })
+
+
+    }
+</script>

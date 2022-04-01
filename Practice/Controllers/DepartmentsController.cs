@@ -49,25 +49,19 @@ namespace Practice.Controllers
         // GET: Departments/Create
         public IActionResult Create()
         {
-            ViewData["LocationsId"] = new SelectList(_context.Locations, "Id", "Id");
+            ViewData["Manager"] = new SelectList(_context.Emplyees, "Id", "FirstName");
+            ViewData["LocationsId"] = new SelectList(_context.Locations, "Id", "LocationAddress");
             return View();
         }
 
-        // POST: Departments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ManagerId,LocationsId")] Departments departments)
+
+        public async Task<IActionResult> CreateDepartment(Departments departments)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(departments);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["LocationsId"] = new SelectList(_context.Locations, "Id", "Id", departments.LocationsId);
-            return View(departments);
+
+            _context.Add(departments);
+            await _context.SaveChangesAsync();
+            return Ok();
+
         }
 
         // GET: Departments/Edit/5
@@ -87,38 +81,33 @@ namespace Practice.Controllers
             return View(departments);
         }
 
-        // POST: Departments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ManagerId,LocationsId")] Departments departments)
+
+        public async Task<IActionResult> EditDepartment(int id, Departments departments)
         {
             if (id != departments.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(departments);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DepartmentsExists(departments.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(departments);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!DepartmentsExists(departments.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok();
+
             ViewData["LocationsId"] = new SelectList(_context.Locations, "Id", "Id", departments.LocationsId);
             return View(departments);
         }

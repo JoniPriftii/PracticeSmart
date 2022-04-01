@@ -136,7 +136,7 @@ namespace Practice.Controllers
         
 
 
-        //Admin UserDetils Page ku behen ndryshimet asinkronet tek te dhenat e userave
+        //Admin UserDetils Page 
         public async Task<IActionResult> Details(string id)
         {
 

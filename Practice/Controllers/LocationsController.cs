@@ -53,21 +53,16 @@ namespace Practice.Controllers
             return View();
         }
 
-        // POST: Locations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,LocationAddress,PostalCode,City,StateProvince,CountriesId")] Locations locations)
+
+        public async Task<IActionResult> CreateLocations(Locations locations)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(locations);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+
+            _context.Add(locations);
+            await _context.SaveChangesAsync();
+            return Ok();
+
             ViewData["CountriesId"] = new SelectList(_context.Countries, "Id", "Id", locations.CountriesId);
-            return View(locations);
+
         }
 
         // GET: Locations/Edit/5
@@ -87,40 +82,35 @@ namespace Practice.Controllers
             return View(locations);
         }
 
-        // POST: Locations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LocationAddress,PostalCode,City,StateProvince,CountriesId")] Locations locations)
+
+        public async Task<IActionResult> EditLocations(int id, Locations locations)
         {
             if (id != locations.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(locations);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LocationsExists(locations.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(locations);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LocationsExists(locations.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok();
+
             ViewData["CountriesId"] = new SelectList(_context.Countries, "Id", "Id", locations.CountriesId);
-            return View(locations);
+
         }
 
         // GET: Locations/Delete/5

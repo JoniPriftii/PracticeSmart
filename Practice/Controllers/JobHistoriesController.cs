@@ -55,7 +55,7 @@ namespace Practice.Controllers
         public IActionResult Create(string? id)
         {
             ViewBag.CurrentId = null;
-            if(id != null)
+            if (id != null)
             {
                 ViewBag.CurrentId = id;
             }
@@ -65,36 +65,32 @@ namespace Practice.Controllers
             return View();
         }
 
-        // POST: JobHistories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(JobHistory jobHistory)
+
+        public async Task<IActionResult> CreateJobHistories(JobHistory jobHistory)
         {
             var user = new Emplyees();
-             
-            if(jobHistory.EmplyeesId == null)
+
+            if (jobHistory.EmplyeesId == null)
             {
                 user = await _userManager.FindByNameAsync(User.Identity.Name);
                 jobHistory.EmplyeesId = user.Id;
             }
             else
             {
-                 user = await _userManager.FindByIdAsync(jobHistory.EmplyeesId);
+                user = await _userManager.FindByIdAsync(jobHistory.EmplyeesId);
 
             }
 
             jobHistory.DepartmentsId = user.DepartmentsId;
-                jobHistory.JobsId = user.JobsId;
-                _context.Add(jobHistory);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            jobHistory.JobsId = user.JobsId;
+            _context.Add(jobHistory);
+            await _context.SaveChangesAsync();
+            return Ok();
 
             ViewData["DepartmentsId"] = new SelectList(_context.Departments, "Id", "Id", jobHistory.DepartmentsId);
             ViewData["EmplyeesId"] = new SelectList(_context.Emplyees, "Id", "Id", jobHistory.EmplyeesId);
             ViewData["JobsId"] = new SelectList(_context.Jobs, "Id", "Id", jobHistory.JobsId);
-            return View(jobHistory);
+
         }
 
         // GET: JobHistories/Edit/5
@@ -116,42 +112,37 @@ namespace Practice.Controllers
             return View(jobHistory);
         }
 
-        // POST: JobHistories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StartDate,EndDate,JobsId,EmplyeesId,DepartmentsId")] JobHistory jobHistory)
+
+        public async Task<IActionResult> EditJobHistories(int id, JobHistory jobHistory)
         {
             if (id != jobHistory.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(jobHistory);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!JobHistoryExists(jobHistory.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(jobHistory);
+                await _context.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!JobHistoryExists(jobHistory.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok();
+
             ViewData["DepartmentsId"] = new SelectList(_context.Departments, "Id", "Id", jobHistory.DepartmentsId);
             ViewData["EmplyeesId"] = new SelectList(_context.Emplyees, "Id", "Id", jobHistory.EmplyeesId);
             ViewData["JobsId"] = new SelectList(_context.Jobs, "Id", "Id", jobHistory.JobsId);
-            return View(jobHistory);
+
         }
 
         // GET: JobHistories/Delete/5
