@@ -11,7 +11,7 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-12">
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="JobTitle" class="control-label"></label>
@@ -34,14 +34,14 @@
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
     <button type="button"
-            onclick="Create('@Url.Action("EditJobs","Jobs")')" class="btn btn-primary">
+            onclick="CreateJob('@Url.Action("EditJobs","Jobs")')" class="btn btn-primary">
         Edit
     </button>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 <script>
-    function Create(url )
+    function CreateJob(url )
     {
         var job = $("#JobTitle").val();
         var min = $("#MinSalary").val();
@@ -49,7 +49,7 @@
         $.ajax({
             type:"POST",
             url: url,
-             data:{JobTitle:job, MinSalary:min,MaxSalary:max},
+             data:{JobTitle:job, MinSalary:min,MaxSalary:max ,Id : @Model.Id},
              success:function(response)
              {
                  location.reload();

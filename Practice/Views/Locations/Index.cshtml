@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Practice.Models.Locations>
-
+@using Practice.Helper;
 @{
     ViewData["Title"] = "Index";
 }
@@ -44,11 +44,11 @@
                 @Html.DisplayFor(modelItem => item.StateProvince)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Countries.Id)
+                @Find.GetCountryName(ViewBag.Context , item.Countries.Id)
             </td>
             <td>
                 <a class="btn btn-primary" onclick="DisplayModalStacked('@Url.Action("Edit","Locations")',1)" >Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a class="btn btn-primary" onclick="DisplayModalStacked('@Url.Action("Details","Locations")',1)">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

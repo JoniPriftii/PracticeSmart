@@ -11,7 +11,7 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <div class="col-md-4 mx-auto">
+        <div class="col-md-12 ">
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -19,13 +19,13 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ManagerId" class="control-label"></label>
-                <input asp-for="ManagerId" class="form-control" />
+                <label class="control-label">Manager</label>
+                <select asp-for="ManagerId" class="form-control" asp-items="ViewBag.Employees"></select>
                 <span asp-validation-for="ManagerId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LocationsId" class="control-label"></label>
-                <select asp-for="LocationsId" class="form-control" asp-items="ViewBag.LocationsId"></select>
+                <select asp-for="LocationsId" class="form-control" asp-items="ViewBag.LocationsCity"></select>
                 <span asp-validation-for="LocationsId" class="text-danger"></span>
             </div>
 
@@ -51,7 +51,7 @@
         $.ajax({
             type:"POST",
             url: url,
-             data:{Name:name, ManagerId:manager,LocationsId:locations},
+             data:{Name:name, ManagerId:manager,LocationsId:locations, Id:@Model.Id},
              success:function(response)
              {
                  location.reload();

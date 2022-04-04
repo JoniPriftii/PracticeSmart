@@ -77,17 +77,12 @@ namespace Practice.Controllers
         }
 
 
-        public async Task<IActionResult> EditRegions(int id, Regions regions)
+        public async Task<IActionResult> EditRegions( Regions regions)
         {
-            if (id != regions.Id)
-            {
-                return NotFound();
-            }
-
-
             try
             {
-                _context.Update(regions);
+                Regions reg = _context.Regions.FirstOrDefault(r => r.Id == regions.Id);
+                reg.Name = regions.Name;                
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

@@ -24,6 +24,7 @@ namespace Practice.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Departments.Include(d => d.Locations);
+            ViewData["Context"] = _context;
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,6 +39,8 @@ namespace Practice.Controllers
             var departments = await _context.Departments
                 .Include(d => d.Locations)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            ViewData["Context"] = _context;
             if (departments == null)
             {
                 return NotFound();
@@ -77,22 +80,21 @@ namespace Practice.Controllers
             {
                 return NotFound();
             }
-            ViewData["LocationsId"] = new SelectList(_context.Locations, "Id", "Id", departments.LocationsId);
+            ViewBag.Employees = new SelectList(_context.Emplyees , "Id","FirstName" );
+            ViewData["LocationsCity"] = new SelectList(_context.Locations, "Id", "City", departments.LocationsId);
             return View(departments);
         }
 
 
-        public async Task<IActionResult> EditDepartment(int id, Departments departments)
+        public async Task<IActionResult> EditDepartment(Departments departments)
         {
-            if (id != departments.Id)
-            {
-                return NotFound();
-            }
-
-
             try
             {
-                _context.Update(departments);
+                Departments departamentDb = _context.Departments.FirstOrDefault(d => d.Id == departments.Id);
+                departamentDb.ManagerId = departments.ManagerId;
+                departamentDb.LocationsId = departments.LocationsId;
+                departamentDb.Name = departments.Name;
+               
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

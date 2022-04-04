@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Practice.Models.Departments>
-
+@using Practice.Helper;
 @{
     ViewData["Title"] = "Index";
 }
@@ -31,10 +31,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ManagerId)
+                @Find.GetEmployeeName(ViewBag.Context ,item.ManagerId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Locations.Id)
+                @Html.DisplayFor(modelItem => item.Locations.City)
             </td>
             <td>
                 <a class="btn btn-primary" onclick="DisplayModalStacked('@Url.Action("Edit","Departments" ,new{id = @item.Id})',1 )" >Edit</a> |

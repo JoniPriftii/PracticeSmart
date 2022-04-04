@@ -1,5 +1,5 @@
 ﻿@model Practice.Models.JobHistory
-
+@using Practice.Helper;
 @{
     ViewData["Title"] = "Details";
     Layout = null;
@@ -28,19 +28,19 @@
                 @Html.DisplayNameFor(model => model.Jobs)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Jobs.Id)
+                @Find.GetJobTitle(ViewBag.Context , Model.JobsId)
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Employees)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Employees.Id)
+                @Find.GetEmployeeName(ViewBag.Context , Model.EmplyeesId)
             </dd>
             <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Departments)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Departments.Id)
+                @Find.GetDepartamentName(ViewBag.Context , Model.DepartmentsId)
             </dd>
         </dl>
     </div>

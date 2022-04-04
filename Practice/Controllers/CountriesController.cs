@@ -34,7 +34,7 @@ namespace Practice.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Context = _context;
             var countries = await _context.Countries
                 .Include(c => c.Regions)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -76,22 +76,18 @@ namespace Practice.Controllers
             {
                 return NotFound();
             }
-            ViewData["RegionsId"] = new SelectList(_context.Regions, "Id", "Id", countries.RegionsId);
+            ViewData["RegionsName"] = new SelectList(_context.Regions, "Id", "Name", countries.RegionsId);
             return View(countries);
         }
 
 
-        public async Task<IActionResult> EditCountries(int id, Countries countries)
-        {
-            if (id != countries.Id)
-            {
-                return NotFound();
-            }
-
-
+        public async Task<IActionResult> EditCountries( Countries countries)
+        {   
             try
             {
-                _context.Update(countries);
+                Countries count = await _context.Countries.FindAsync(countries.Id);
+                count.Name = countries.Name;
+                count.RegionsId = countries.RegionsId;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

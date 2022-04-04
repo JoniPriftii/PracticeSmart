@@ -11,7 +11,7 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-12">
                 <input type="hidden" asp-for="Id" />
                 <div class="form-group">
                     <label asp-for="LocationAddress" class="control-label"></label>
@@ -50,7 +50,7 @@
     </button>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 <script>
     function Create(url )
     {
@@ -62,7 +62,7 @@
         $.ajax({
             type:"POST",
             url: url,
-             data:{LocationAddress:location, PostalCode:post,City:city , StateProvince:state , CountriesId:country },
+             data:{LocationAddress:location, PostalCode:post, City:city , StateProvince:state , CountriesId:country , Id : @Model.Id},
              success:function(response)
              {
                  location.reload();

@@ -4,21 +4,20 @@
     ViewData["Title"] = "Edit";
     Layout = null;
 }
-
+<div>
 <div class="modal-header">
     <h5 class="modal-title">Modal title</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-12">
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            
+            </div>           
     </div>
 </div>
 </div>
@@ -30,7 +29,8 @@
     </button>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
 <script>
     function Create(url )
     {
@@ -38,7 +38,7 @@
         $.ajax({
             type:"POST",
             url: url,
-             data:{Name:name},
+             data:{Name:name , Id :@Model.Id},
              success:function(response)
              {
                  location.reload();

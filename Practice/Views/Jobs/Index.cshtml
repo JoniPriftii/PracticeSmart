@@ -36,7 +36,7 @@
             </td>
             <td>
                 <a class="btn btn-primary" onclick="DisplayModalStacked('@Url.Action("Edit","Jobs" , new{id = @item.Id})',1)" >Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a class="btn btn-primary" onclick="DisplayModalStacked('@Url.Action("Details","Jobs" , new{id = @item.Id})',1)">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

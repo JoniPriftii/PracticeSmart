@@ -34,7 +34,7 @@ namespace Practice.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Context = _context;
             var locations = await _context.Locations
                 .Include(l => l.Countries)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -83,17 +83,16 @@ namespace Practice.Controllers
         }
 
 
-        public async Task<IActionResult> EditLocations(int id, Locations locations)
-        {
-            if (id != locations.Id)
-            {
-                return NotFound();
-            }
-
-
+        public async Task<IActionResult> EditLocations( Locations locations)
+        {            
             try
             {
-                _context.Update(locations);
+                Locations loc = _context.Locations.FirstOrDefault(l => l.Id == locations.Id);
+                loc.LocationAddress = locations.LocationAddress;
+                loc.PostalCode = locations.PostalCode;
+                loc.City = locations.City;
+                loc.StateProvince = locations.StateProvince;
+                loc.CountriesId = locations.CountriesId;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

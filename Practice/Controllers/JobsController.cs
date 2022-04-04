@@ -77,17 +77,14 @@ namespace Practice.Controllers
         }
 
 
-        public async Task<IActionResult> EditJobs(int id, Jobs jobs)
+        public async Task<IActionResult> EditJobs(Jobs jobs)
         {
-            if (id != jobs.Id)
-            {
-                return NotFound();
-            }
-
-
             try
             {
-                _context.Update(jobs);
+                Jobs jobDb = _context.Jobs.FirstOrDefault(j => j.Id == jobs.Id);
+                jobDb.JobTitle = jobs.JobTitle;
+                jobDb.MinSalary = jobs.MinSalary;
+                jobDb.MaxSalary = jobs.MaxSalary;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

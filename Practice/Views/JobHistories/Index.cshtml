@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Practice.Models.JobHistory>
-
+@using Practice.Helper;
 @{
     ViewData["Title"] = "Index";
 }
@@ -38,13 +38,13 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Jobs.Id)
+                @Find.GetJobTitle(ViewBag.Context , item.JobsId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Employees.Id)
+                @Find.GetEmployeeName(ViewBag.Context , item.EmplyeesId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Departments.Id)
+                @Find.GetDepartamentName(ViewBag.Context , item.DepartmentsId)
             </td>
             <td>
                 <a class="btn btn-primary" onclick="DisplayModalStacked('@Url.Action("Edit","JobHistories" ,new {id = @item.Id})',1)" >Edit</a> |

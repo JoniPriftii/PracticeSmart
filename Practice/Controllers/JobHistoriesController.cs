@@ -27,6 +27,7 @@ namespace Practice.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.JobHistories.Include(j => j.Departments).Include(j => j.Employees).Include(j => j.Jobs);
+            ViewBag.Context = _context;
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,7 +38,7 @@ namespace Practice.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.Context = _context;
             var jobHistory = await _context.JobHistories
                 .Include(j => j.Departments)
                 .Include(j => j.Employees)
@@ -102,6 +103,10 @@ namespace Practice.Controllers
             }
 
             var jobHistory = await _context.JobHistories.FindAsync(id);
+
+            ViewBag.Jobs = _context.Jobs.ToList();
+            ViewBag.Emp = _context.Emplyees.ToList();
+            ViewBag.Dep = _context.Departments.ToList();
             if (jobHistory == null)
             {
                 return NotFound();
@@ -113,17 +118,18 @@ namespace Practice.Controllers
         }
 
 
-        public async Task<IActionResult> EditJobHistories(int id, JobHistory jobHistory)
+        public async Task<IActionResult> EditJobHistories(JobHistory jobHistory)
         {
-            if (id != jobHistory.Id)
-            {
-                return NotFound();
-            }
-
+            
 
             try
             {
-                _context.Update(jobHistory);
+                JobHistory jobHisDb = _context.JobHistories.FirstOrDefault(j => j.Id == jobHistory.Id);
+                jobHisDb.StartDate = jobHistory.StartDate;
+                jobHisDb.EndDate = jobHistory.EndDate;
+                jobHisDb.EmplyeesId = jobHistory.EmplyeesId;
+                jobHisDb.DepartmentsId = jobHistory.DepartmentsId;
+                jobHisDb.JobsId = jobHistory.JobsId;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
