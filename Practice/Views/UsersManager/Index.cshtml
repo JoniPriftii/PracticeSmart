@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Practice.ViewModel
+@using Practice.Helper
 @model IEnumerable<UserAndRoleViewModel>
 @{
     ViewData["Title"] = "Index";
@@ -33,8 +34,8 @@
         <tr>
             <td >@user.Employees.FirstName</td>
             <td >@user.Employees.LastName</td>
-            <td>@user?.Employees.Departments?.Name</td>
-            <td>@user?.Employees.Jobs?.JobTitle</td>
+            <td>@Find.GetDepartamentName(ViewBag.Context , user.Employees.DepartmentsId)</td>
+            <td>@Find.GetJobTitle(ViewBag.Context , user.Employees.JobsId)</td>
             @*<td><span id="@user.Employees.Id"></span></td>
             <td>
                 <select onchange="ChangeRole('@Url.Action("sendData","UsersManager")','@user.Employees.Id',this)" style="width:30%;">

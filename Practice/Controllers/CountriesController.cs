@@ -24,6 +24,7 @@ namespace Practice.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Countries.Include(c => c.Regions);
+            ViewBag.Context = _context;
             return View(await applicationDbContext.ToListAsync());
         }
 

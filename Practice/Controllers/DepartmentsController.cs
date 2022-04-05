@@ -115,13 +115,25 @@ namespace Practice.Controllers
         }
 
         // GET: Departments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
+            ViewBag.DepId = id;
             if (id == null)
             {
                 return NotFound();
             }
+            List<Practice.ViewModel.ErrorViewModel> errorViews = new List<Practice.ViewModel.ErrorViewModel>();
+            var userindepartment = _context.Emplyees.Any(s => s.DepartmentsId == id);
+            if(userindepartment)
+            {
+                Practice.ViewModel.ErrorViewModel errorView = new Practice.ViewModel.ErrorViewModel
+                {
+                    Error = "Ka user ne kete depatament"
+                };
+                errorViews.Add(errorView);
 
+
+            }
             var departments = await _context.Departments
                 .Include(d => d.Locations)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -130,12 +142,11 @@ namespace Practice.Controllers
                 return NotFound();
             }
 
-            return View(departments);
+            return View(errorViews);
         }
 
         // POST: Departments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("DeleteDepartment")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var departments = await _context.Departments.FindAsync(id);

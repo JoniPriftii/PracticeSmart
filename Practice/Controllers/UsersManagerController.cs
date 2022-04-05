@@ -25,7 +25,7 @@ namespace Practice.Controllers
         public IActionResult Index()
         {
 
-
+            ViewBag.Context = _context;
             var model = new List<UserAndRoleViewModel>();
 
             foreach (var user in _usersManager.Users)

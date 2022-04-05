@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Practice.Models.Countries>
-
+@using Practice.Helper;
 @{
     ViewData["Title"] = "Index";
 }
@@ -26,7 +26,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Find.GetCountryName(ViewBag.Context , item.Id)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Regions.Name)
